@@ -11,6 +11,9 @@ git clone https://github.com/ion-onboarding/nomad-aws.git && cd nomad-aws
 ```
 
 ## Todo
+- [] create `nomad-aws/manually/infrastructure/README.md`
+- [] in `README.md` add manual steps to create components described in the diagram
+- [] test VMs can ping internet and each other
 
 ## Done
 - [x] This README
