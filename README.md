@@ -16,7 +16,6 @@ cd nomad-aws
 ```
 
 ## Todo
-- [] adjust region to reflect Nomad region and datacenter
 - [] add link to diagram to main README and ./manually/infrastructure
 
 ## Done
@@ -25,4 +24,5 @@ cd nomad-aws
 - [x] create `nomad-aws/manually/infrastructure/README.md`
 - [x] in `README.md` add manual steps to create components described in the diagram
 - [x] test VMs can ping internet and each other
+- [x] adjust region to reflect Nomad region and datacenter
 
