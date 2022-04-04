@@ -16,7 +16,6 @@ cd nomad-aws
 ```
 
 ## Todo
-- [] manual-installation: create `manually/installation/README.md` structure
 - [] manual-installation: consul install on machines `consul-server`, `nomad-server` and `nomad-client`
 - [] manual-installation: add consul systemD service file on machines `consul-server`, `nomad-server` and `nomad-client`
 - [] manual-installation: add nomad systemD service file on machines `nomad-server` and `nomad-client`
@@ -35,3 +34,4 @@ cd nomad-aws
 - [x] adjust region to reflect Nomad region and datacenter
 - [x] add link to diagram to main README and ./manually/infrastructure/README
 - [x] manual-installation: create branch manual-installation and add Todo list
+- [x] manual-installation: create `manually/installation/README.md` structure
