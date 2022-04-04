@@ -5,9 +5,14 @@ nomad cluster following [nomad architecture reference](https://learn.hashicorp.c
 ![](screenshots/2022-04-02-14-04-27.png)
 
 ## How to use this repo
-Clone and cd into repo
+- Clone this repo
 ```
-git clone https://github.com/ion-onboarding/nomad-aws.git && cd nomad-aws
+git clone https://github.com/ion-onboarding/nomad-aws.git
+```
+
+- change directory
+```
+cd nomad-aws
 ```
 
 ## Todo
@@ -17,4 +22,4 @@ git clone https://github.com/ion-onboarding/nomad-aws.git && cd nomad-aws
 - [x] Diagram
 - [x] create `nomad-aws/manually/infrastructure/README.md`
 - [x] in `README.md` add manual steps to create components described in the diagram
-    - [x] test VMs can ping internet and each other
+- [x] test VMs can ping internet and each other
