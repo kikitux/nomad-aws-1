@@ -16,6 +16,16 @@ cd nomad-aws
 ```
 
 ## Todo
+- [] manual-installation: create branch manual-installation and add Todo list
+- [] manual-installation: create `manually/installation/README.md` structure
+- [] manual-installation: consul install on machines `consul-server`, `nomad-server` and `nomad-client`
+- [] manual-installation: add consul systemD service file on machines `consul-server`, `nomad-server` and `nomad-client`
+- [] manual-installation: add nomad systemD service file on machines `nomad-server` and `nomad-client`
+- [] manual-installation: configure consul agent to run in server mode on `consul-server` machine
+- [] manual-installation: configure consul agent to run in client mode on `nomad-server` and `nomad-client` machines
+- [] manual-installation: configure nomad agent to run in server mode on `nomad-server`
+- [] manual-installation: configure nomad agent to run in client mode on `nomad-client`
+
 
 ## Done
 - [x] This README
