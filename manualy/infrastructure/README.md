@@ -2,7 +2,7 @@
 - all resources will be created in region `eu-north-1`
 
 ## Diagram
-![](https://github.com/ion-onboarding/nomad-aws/blob/main/screenshots/2022-04-02-14-04-27.png)
+![](../../diagram/nomad-aws-diagram.png)
 
 <br>
 
