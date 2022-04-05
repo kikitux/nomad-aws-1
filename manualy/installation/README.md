@@ -16,6 +16,8 @@
 
 # SSH how to connect
 ## SSH connect to `consul-server`
+*Same steps applies for `nomad-server` and `nomad-client`*
+
 - access `EC2 Instances` > `Instances`
     - select `consul-server` instance
     - click `Connect` button
@@ -35,55 +37,40 @@
 ![](screenshots/2022-04-04-23-18-47.png)
 
 - This is a sample output from a terminal
+```
+[ion:~] $ cd ~/Downloads/
+[ion:~] $ chmod 400 ssh-key-pair-ec2.pem
+[ion:~/Downloads] $ ssh -i "ssh-key-pair-ec2.pem" ubuntu@ec2-16-16-56-28.eu-north-1.compute.amazonaws.com
+The authenticity of host 'ec2-16-16-56-28.eu-north-1.compute.amazonaws.com (16.16.56.28)' can't be established.
+ECDSA key fingerprint is SHA256:kLs/wS+jRYjxcf6jZvIIw1XYNt1hRtp4olyjr0e4H20.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-16-16-56-28.eu-north-1.compute.amazonaws.com,16.16.56.28' (ECDSA) to the list of known hosts.
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.13.0-1019-aws x86_64)
 
-![](screenshots/2022-04-04-23-23-09.png)
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Tue Apr  5 09:11:28 UTC 2022
+
+  System load:  0.25              Processes:             117
+  Usage of /:   30.6% of 7.69GB   Users logged in:       0
+  Memory usage: 5%                IPv4 address for ens5: 10.0.1.28
+  Swap usage:   0%
+
+ * Ubuntu Pro delivers the most comprehensive open source security and
+   compliance features.
+
+   https://ubuntu.com/aws/pro
+
+45 updates can be applied immediately.
+7 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
 
 
-## SSH connect to `nomad-server`
-- access `EC2 Instances` > `Instances`
-    - select `consul-server` instance
-    - click `Connect` button
-
-![](screenshots/2022-04-04-23-24-27.png)
-
-- Connect to instance (key / ip / dns changes form setup to setup)
-    - Open an SSH client.
-    - Locate your private key file.
-    - Run this command, if necessary, to ensure your key is not publicly viewable.
-        - ```chmod 400 ssh-key-pair-ec2.pem```
-    - Connect to your instance using its Public DNS:
-        - ```ec2-13-49-69-160.eu-north-1.compute.amazonaws.com```
-    - Example:
-        - ```ssh -i "ssh-key-pair-ec2.pem" ubuntu@ec2-13-49-69-160.eu-north-1.compute.amazonaws.com```
-
-![](screenshots/2022-04-04-23-25-20.png)
-
-- This is a sample output from a terminal
-
-![](screenshots/2022-04-04-23-28-30.png)
-
-## SSH connect to `nomad-client`
-- access `EC2 Instances` > `Instances`
-    - select `consul-server` instance
-    - click `Connect` button
-
-![](screenshots/2022-04-04-23-29-40.png)
-
-- Connect to instance (key / ip / dns changes form setup to setup)
-    - Open an SSH client.
-    - Locate your private key file.
-    - Run this command, if necessary, to ensure your key is not publicly viewable.
-        - ```chmod 400 ssh-key-pair-ec2.pem```
-    - Connect to your instance using its Public DNS:
-        - ```ec2-16-171-54-188.eu-north-1.compute.amazonaws.com```
-    - Example:
-        - ```ssh -i "ssh-key-pair-ec2.pem" ubuntu@ec2-16-171-54-188.eu-north-1.compute.amazonaws.com```
-
-![](screenshots/2022-04-04-23-31-03.png)
-
-- This is a sample output from a terminal
-
-![](screenshots/2022-04-04-23-32-59.png)
+Last login: Mon Apr  4 21:40:23 2022 from 77.162.168.171
+ubuntu@consul-server:~$ 
+```
 
 
 # Change hostnames
@@ -94,20 +81,10 @@ Set hostname on consul server to `consul-server`
 sudo hostnamectl set-hostname consul-server
 ```
 
-Reboot machine to take effect (or open a new shell)
-```
-sudo systemctl reboot
-```
-
 ## Set hostname `nomad-server`
 Set hostname on consul server to `nomad-server`
 ```
 sudo hostnamectl set-hostname nomad-server
-```
-
-Reboot machine to take effect (or open a new shell)
-```
-sudo systemctl reboot
 ```
 
 ## Set hostname `nomad-client`
@@ -116,13 +93,24 @@ Set hostname on consul server to `nomad-client`
 sudo hostnamectl set-hostname nomad-client
 ```
 
-Reboot machine to take effect (or open a new shell)
+Reboot machines to take effect (or open a new shells)
 ```
 sudo systemctl reboot
 ```
 
 # Consul Installation
-## consul binary on `consul-server`
+## consul binary on `consul-server`, `nomad-server` & `nomad-client`
+Documentation can be found on [Deployment Guide](https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/production-deploy)
+
+Install unzip
+```
+sudo apt-get update -y
+```
+```
+sudo apt-get install -y unzip
+```
+
+Download consul
 ```
 curl -L https://releases.hashicorp.com/consul/1.11.4/consul_1.11.4_linux_amd64.zip \
      -o consul.zip
@@ -130,12 +118,8 @@ curl -L https://releases.hashicorp.com/consul/1.11.4/consul_1.11.4_linux_amd64.z
 ```
 ls consul.zip
 ```
-```
-sudo apt-get update -y
-```
-```
-sudo apt-get install -y unzip
-```
+
+Unzip and move to `/usr/bin/`
 ```
 unzip consul.zip
 ```
@@ -145,14 +129,17 @@ sudo chown root:root consul
 ```
 sudo mv consul /usr/bin/
 ```
+Create a unique, non-privileged system user to run consul.
 ```
 sudo useradd --system --home /etc/consul.d --shell /bin/false consul
 ```
+Create data directory for consul
 ```
-sudo mkdir --parents /opt/consul
+sudo mkdir --parents /opt/consul/
 ```
+Make consul owner of the data directory
 ```
-sudo chown --recursive consul:consul /opt/consul
+sudo chown --recursive consul:consul /opt/consul/
 ```
 
 ## consul systemD service on `consul-server`
@@ -322,42 +309,6 @@ It's helpful on consul-server to view live messages while other clients join
 journalctl -f -u consul
 ```
 
-## consul binary on `nomad-server`
-```
-curl -L https://releases.hashicorp.com/consul/1.11.4/consul_1.11.4_linux_amd64.zip \
-     -o consul.zip
-```
-```
-ls consul.zip
-```
-```
-sudo apt-get update -y
-```
-```
-sudo apt-get install -y unzip
-```
-```
-unzip consul.zip
-```
-```
-sudo chown root:root consul
-```
-```
-sudo mv consul /usr/bin/
-```
-```
-sudo rm consul.zip
-```
-```
-sudo useradd --system --home /etc/consul.d --shell /bin/false consul
-```
-```
-sudo mkdir --parents /opt/consul
-```
-```
-sudo chown --recursive consul:consul /opt/consul
-```
-
 ## consul systemD service on `nomad-server`
 ```
 sudo touch /etc/systemd/system/consul.service
@@ -461,43 +412,6 @@ consul members -http-addr=http://127.0.0.1:8500
 ```
 ```
 CONSUL_HTTP_ADDR=http://127.0.0.1:8500 consul members
-```
-
-
-## consul binary on `nomad-client`
-```
-curl -L https://releases.hashicorp.com/consul/1.11.4/consul_1.11.4_linux_amd64.zip \
-     -o consul.zip
-```
-```
-ls consul.zip
-```
-```
-sudo apt-get update -y
-```
-```
-sudo apt-get install -y unzip
-```
-```
-unzip consul.zip
-```
-```
-sudo chown root:root consul
-```
-```
-sudo mv consul /usr/bin/
-```
-```
-sudo rm consul.zip
-```
-```
-sudo useradd --system --home /etc/consul.d --shell /bin/false consul
-```
-```
-sudo mkdir --parents /opt/consul
-```
-```
-sudo chown --recursive consul:consul /opt/consul
 ```
 
 ## consul systemD service on `nomad-client`
@@ -613,19 +527,26 @@ CONSUL_HTTP_ADDR=http://127.0.0.1:8500 consul members
 ```
 
 # Nomad Installation
-## Nomad binary on `nomad-server`
-```
-curl -L https://releases.hashicorp.com/nomad/1.2.6/nomad_1.2.6_linux_amd64.zip \
-     -o nomad.zip
-```
-```
-ls nomad.zip
-```
+## Nomad binary on `nomad-server` & `nomad-client`
+Documentation can be found at [Nomad Deployment Guide](https://learn.hashicorp.com/tutorials/nomad/production-deployment-guide-vm-with-consul?in=nomad/enterprise)
+
+Make sure unzip is installed
 ```
 sudo apt-get update -y
 ```
 ```
 sudo apt-get install -y unzip
+```
+
+Download nomad
+```
+curl -L https://releases.hashicorp.com/nomad/1.2.6/nomad_1.2.6_linux_amd64.zip \
+     -o nomad.zip
+```
+
+Unzip and move to `/usr/local/bin`
+```
+ls nomad.zip
 ```
 ```
 unzip nomad.zip
@@ -843,43 +764,6 @@ export NOMAD_ADDR=http://10.0.1.208:4646
 ```
 
 
-## Nomad binary on `nomad-client`
-```
-curl -L https://releases.hashicorp.com/nomad/1.2.6/nomad_1.2.6_linux_amd64.zip \
-     -o nomad.zip
-```
-```
-ls nomad.zip
-```
-```
-sudo apt-get update -y
-```
-```
-sudo apt-get install -y unzip
-```
-```
-unzip nomad.zip
-```
-```
-sudo chown root:root nomad
-```
-```
-sudo mv nomad /usr/local/bin/
-```
-
-Create a unique, non-privileged system user to run Nomad.
-```
-sudo useradd --system --home /etc/nomad.d --shell /bin/false nomad
-```
-
-Create a data directory for Nomad
-```
-sudo mkdir --parents /opt/nomad/
-```
-```
-sudo chown -R nomad:nomad /opt/nomad/
-```
-
 ## nomad systemD service on `nomad-client`
 Create a Nomad service file at /etc/systemd/system/nomad.service
 ```
@@ -1094,7 +978,7 @@ Export http address
 export NOMAD_ADDR=http://10.0.1.208:4646
 ```
 
-# install docker binary on `nomad-client`
+# Install docker binary on `nomad-client`
 Install docker using [convenience script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -1125,3 +1009,9 @@ sudo cp ${ENVOY_LOCATION} /usr/local/bin
 ```
 
 # Restart nomad & consul on `nomad-client`
+```
+sudo systemctl restart consul
+```
+```
+sudo systemctl restart nomad
+```
