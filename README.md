@@ -16,13 +16,6 @@ cd nomad-aws
 ```
 
 ## Todo
-- [] manual-installation: consul install on machines `consul-server`, `nomad-server` and `nomad-client`
-- [] manual-installation: add consul systemD service file on machines `consul-server`, `nomad-server` and `nomad-client`
-- [] manual-installation: add nomad systemD service file on machines `nomad-server` and `nomad-client`
-- [] manual-installation: configure consul agent to run in server mode on `consul-server` machine
-- [] manual-installation: configure consul agent to run in client mode on `nomad-server` and `nomad-client` machines
-- [] manual-installation: configure nomad agent to run in server mode on `nomad-server`
-- [] manual-installation: configure nomad agent to run in client mode on `nomad-client`
 
 
 ## Done
@@ -35,3 +28,12 @@ cd nomad-aws
 - [x] add link to diagram to main README and ./manually/infrastructure/README
 - [x] manual-installation: create branch manual-installation and add Todo list
 - [x] manual-installation: create `manually/installation/README.md` structure
+- [x] manual-installation: consul install on machines `consul-server`, `nomad-server` and `nomad-client`
+- [x] manual-installation: add consul systemD service file on machines `consul-server`, `nomad-server` and `nomad-client`
+- [x] manual-installation: add nomad systemD service file on machines `nomad-server` and `nomad-client`
+- [x] manual-installation: configure consul agent to run in server mode on `consul-server` machine
+- [x] manual-installation: configure consul agent to run in client mode on `nomad-server` and `nomad-client` machines
+- [x] manual-installation: configure nomad agent to run in server mode on `nomad-server`
+- [x] manual-installation: configure nomad agent to run in client mode on `nomad-client`
+- [x] manual-installation: install docker on `nomad-client`
+- [x] manual-installation: install envoy on `nomad-client`
