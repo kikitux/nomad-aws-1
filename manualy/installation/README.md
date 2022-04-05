@@ -74,20 +74,16 @@ ubuntu@consul-server:~$
 
 
 # Change hostnames
-## Set hostname `consul-server`
-
 Set hostname on consul server to `consul-server`
 ```
 sudo hostnamectl set-hostname consul-server
 ```
 
-## Set hostname `nomad-server`
 Set hostname on consul server to `nomad-server`
 ```
 sudo hostnamectl set-hostname nomad-server
 ```
 
-## Set hostname `nomad-client`
 Set hostname on consul server to `nomad-client`
 ```
 sudo hostnamectl set-hostname nomad-client
@@ -99,7 +95,7 @@ sudo systemctl reboot
 ```
 
 # Consul Installation
-## consul binary on `consul-server`, `nomad-server` & `nomad-client`
+## Consul binary on `consul-server`, `nomad-server` & `nomad-client`
 Documentation can be found on [Deployment Guide](https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/production-deploy)
 
 Install unzip
@@ -1009,6 +1005,7 @@ sudo cp ${ENVOY_LOCATION} /usr/local/bin
 ```
 
 # Restart nomad & consul on `nomad-client`
+To make sure nomad picks up docker installation and consul finds envoy
 ```
 sudo systemctl restart consul
 ```
