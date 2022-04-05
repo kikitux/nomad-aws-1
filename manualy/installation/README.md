@@ -47,51 +47,11 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added 'ec2-16-16-56-28.eu-north-1.compute.amazonaws.com,16.16.56.28' (ECDSA) to the list of known hosts.
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.13.0-1019-aws x86_64)
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  System information as of Tue Apr  5 09:11:28 UTC 2022
-
-  System load:  0.25              Processes:             117
-  Usage of /:   30.6% of 7.69GB   Users logged in:       0
-  Memory usage: 5%                IPv4 address for ens5: 10.0.1.28
-  Swap usage:   0%
-
- * Ubuntu Pro delivers the most comprehensive open source security and
-   compliance features.
-
-   https://ubuntu.com/aws/pro
-
-45 updates can be applied immediately.
-7 of these updates are standard security updates.
-To see these additional updates run: apt list --upgradable
+<snip>
 
 
 Last login: Mon Apr  4 21:40:23 2022 from 77.162.168.171
 ubuntu@consul-server:~$ 
-```
-
-
-# Change hostnames
-Set hostname on consul server to `consul-server`
-```
-sudo hostnamectl set-hostname consul-server
-```
-
-Set hostname on consul server to `nomad-server`
-```
-sudo hostnamectl set-hostname nomad-server
-```
-
-Set hostname on consul server to `nomad-client`
-```
-sudo hostnamectl set-hostname nomad-client
-```
-
-Reboot machines to take effect (or open a new shells)
-```
-sudo systemctl reboot
 ```
 
 # Consul Installation
@@ -100,85 +60,13 @@ Documentation can be found on [Deployment Guide](https://learn.hashicorp.com/tut
 
 Install unzip
 ```
-sudo apt-get update -y
-```
-```
+sudo apt-get update
 sudo apt-get install -y unzip
 ```
 
 Download consul
 ```
-curl -L https://releases.hashicorp.com/consul/1.11.4/consul_1.11.4_linux_amd64.zip \
-     -o consul.zip
-```
-```
-ls consul.zip
-```
-
-Unzip and move to `/usr/bin/`
-```
-unzip consul.zip
-```
-```
-sudo chown root:root consul
-```
-```
-sudo mv consul /usr/bin/
-```
-Create a unique, non-privileged system user to run consul.
-```
-sudo useradd --system --home /etc/consul.d --shell /bin/false consul
-```
-Create data directory for consul
-```
-sudo mkdir --parents /opt/consul/
-```
-Make consul owner of the data directory
-```
-sudo chown --recursive consul:consul /opt/consul/
-```
-
-## consul systemD service on `consul-server`
-```
-sudo touch /etc/systemd/system/consul.service
-```
-Copy paste following file in consul.service
-```
-[Unit]
-Description="HashiCorp Consul - A service mesh solution"
-Documentation=https://www.consul.io/
-Requires=network-online.target
-After=network-online.target
-ConditionFileNotEmpty=/etc/consul.d/consul.hcl
-
-[Service]
-EnvironmentFile=-/etc/consul.d/consul.env
-User=consul
-Group=consul
-ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/
-ExecReload=/bin/kill --signal HUP $MAINPID
-KillMode=process
-KillSignal=SIGTERM
-Restart=on-failure
-LimitNOFILE=65536
-
-[Install]
-WantedBy=multi-user.target
-
-```
-
-## consul configuration on `consul-server`
-```
-sudo mkdir --parents /etc/consul.d
-```
-```
-sudo touch /etc/consul.d/consul.hcl
-```
-```
-sudo chown --recursive consul:consul /etc/consul.d
-```
-```
-sudo chmod 640 /etc/consul.d/consul.hcl
+# TODO use apt-get repo
 ```
 
 Verify the ip address assigned
